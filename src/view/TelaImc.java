@@ -1,5 +1,7 @@
 package view;
 
+import model.Imc;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -112,7 +114,26 @@ public class TelaImc {
     }
 
     private void calcularImc () {
-        // Feature in Development
+
+        Imc imc = new Imc();
+        imc.setPeso(Integer.parseInt(txtPeso.getText().trim()));
+        imc.setAltura(Double.parseDouble(txtAltura.getText().trim()));
+
+        String resultImc = String.valueOf(imc.getImc());
+
+
+        if (imc.getImc() <= 18.5 || imc.getImc() <= 25.0) {
+            painelTituto.setBackground(Color.GREEN);
+            lblResultadoImc.setForeground(Color.GREEN);
+        } else {
+            painelTituto.setBackground(Color.RED);
+            lblResultadoImc.setForeground(Color.RED);
+        }
+
+        lblResultadoImc.setText(resultImc);
+        lblStatusImc.setText(imc.getStatus());
+
+
     }
 
 
