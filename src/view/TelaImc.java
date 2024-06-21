@@ -25,6 +25,10 @@ public class TelaImc {
     private Icon iconBtnCalcular = new ImageIcon(getClass().getResource(imagePath + "calc2.png"));
     private Icon iconBtnLimpar = new ImageIcon(getClass().getResource(imagePath + "restart24.png"));
 
+    int peso = 0;
+    double altura = 0.0;
+
+
     public TelaImc(){
         criarTela();
     }
@@ -113,29 +117,64 @@ public class TelaImc {
         txtPeso.requestFocus();
     }
 
+    Imc imc = new Imc();
+
     private void calcularImc () {
 
-        Imc imc = new Imc();
-        imc.setPeso(Integer.parseInt(txtPeso.getText().trim()));
-        imc.setAltura(Double.parseDouble(txtAltura.getText().trim()));
+        if (validarDados()) {
 
-        String resultImc = String.valueOf(imc.getImc());
+            imc.setPeso(peso);
+            imc.setAltura(altura);
 
+            String resultImc = String.valueOf(imc.getImc());
 
-        if (imc.getImc() <= 18.5 || imc.getImc() <= 25.0) {
-            painelTituto.setBackground(Color.GREEN);
-            lblResultadoImc.setForeground(Color.GREEN);
-        } else {
-            painelTituto.setBackground(Color.RED);
-            lblResultadoImc.setForeground(Color.RED);
+            if (imc.getImc() <= 18.5 || imc.getImc() <= 25.0) {
+                painelTituto.setBackground(Color.GREEN);
+                lblResultadoImc.setForeground(Color.GREEN);
+            } else {
+                painelTituto.setBackground(Color.RED);
+                lblResultadoImc.setForeground(Color.RED);
+            }
+
+          // lblResultadoImc.setText(resultImc);
+
+            lblResultadoImc.setText(
+               // String.format("%.2f", resultImc).replace(".", ",")
+                    String.format("%.2f", imc.getImc()).replace(".", ",")
+           );
+            lblStatusImc.setText(imc.getStatus());
+
         }
-
-        lblResultadoImc.setText(resultImc);
-        lblStatusImc.setText(imc.getStatus());
-
-
     }
 
+    private boolean validarDados() {
+       try{
+            peso = Integer.parseInt(txtPeso.getText().trim());
+       } catch (NumberFormatException erro) {
+           System.out.println(erro);
+           JOptionPane.showMessageDialog(
+                   null,
+                   "O peso deve ser um valor númerico !!",
+                   "Valor Inválido",
+                   JOptionPane.ERROR_MESSAGE
+           );
+           return false;
+       }
 
+       try{
+           altura = Double.parseDouble(txtAltura.getText().replace(",", ".").trim());
+       } catch (NumberFormatException erro) {
+           System.out.println(erro);
+           JOptionPane.showMessageDialog(
+                   null,
+                   "A altura deve ser um valor númerico !!",
+                   "Valor Inválido",
+                   JOptionPane.ERROR_MESSAGE
+           );
+           return false;
+       }
+
+       return true;
+    }
 
 }
